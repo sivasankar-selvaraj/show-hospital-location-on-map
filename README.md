@@ -26,9 +26,9 @@ To run this application by using following command:
 
 		d) mysql -u root -p hospital < db.sql
 
-	2) scrap the top four hospital data from every page
+	2) scrap the top four hospital data custom site
 		
-		(venv) $ python scrap_hospitals.py http://www.listbesthospitals.com/Hospitals-India/Karnataka/Bangalore.aspx 
+		(venv) $ python scrap_hospitals.py 
 
 	3) find geolocation and make json file(hospital_location.json) for hospitals
 		
