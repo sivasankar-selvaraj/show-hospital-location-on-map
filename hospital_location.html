@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <!-- Json file with hospital info -->
+    <script type="text/javascript" src="hospital_address.json"></script>
+    
+    <title>Hospital Locations</title>
+    <style type="text/css">
+    
+    body 
+    {
+        font: normal 10pt Helvetica, Arial;
+    }
+    
+    #map {
+        width: 100%;
+        height: 100%;
+        border: 0px;
+        padding: 0px;
+    }
+    </style>
+    <script type="text/javascript">
+
+    // Parse the hospital data from json file -> hospital_address.json
+    var hospital_data = JSON.parse(hospitals);
+    var icon = new google.maps.MarkerImage("http://www.google.com/mapfiles/marker.png",
+        new google.maps.Size(100, 100), new google.maps.Point(0, 0),
+        new google.maps.Point(16, 32));
+    var center = null;
+    var map = null;
+    var currentPopup;
+    var bounds = new google.maps.LatLngBounds();
+
+
+    //function to initialize the map
+    function initMap() 
+    {
+        var latlng = new google.maps.LatLng(hospital_data[0].lat, hospital_data[0].lon);
+        var mapOptions = 
+        {
+            zoom: 12,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        var latlng = new google.maps.LatLng(hospital_data[0].lat, hospital_data[0].lon);
+        map.setCenter(latlng);
+
+        for (var i = 0; i < hospital_data.length; i++) 
+        {
+            addMarker(hospital_data[i].lat, hospital_data[i].lon, '<b>' + hospital_data[i].hospital_name + '</b>');
+        }
+
+
+    }
+
+    // Function create location pointer based on latitude and longitude of hospital address
+    function addMarker(lat, lng, info) 
+    {
+        var pt = new google.maps.LatLng(lat, lng);
+        bounds.extend(pt);
+        var marker = new google.maps.Marker({
+            position: pt,
+            icon: icon,
+            map: map
+        });
+        var popup = new google.maps.InfoWindow({
+            content: info,
+            maxWidth: 300
+        });
+        google.maps.event.addListener(marker, "click", function() {
+            if (currentPopup != null) {
+                currentPopup.close();
+                currentPopup = null;
+            }
+            popup.open(map, marker);
+            currentPopup = popup;
+        });
+        google.maps.event.addListener(popup, "closeclick", function() {
+            map.panTo(center);
+            currentPopup = null;
+        });
+    }
+    </script>
+</head>
+
+<body onload="initMap()" style="margin:0px; border:0px; padding:0px;">
+    <div id="map"></div>
+</body>
+
+</html>
