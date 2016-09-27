@@ -1,0 +1,15 @@
+[logging]
+log_path = log/app.log
+
+[mysql]
+host = localhost
+user = root
+password = test1234
+db = hospital
+table = hospital_info
+
+[url]
+main_url = http://www.listbesthospitals.com
+
+[outputfile]
+hospital_address = hospital_address.json
